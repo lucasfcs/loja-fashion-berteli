@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(200)
+  email     String   @unique @db.VarChar(200)
+  password  String   @db.VarChar(127)
+  createdBy Int
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+}
+
+model Product {
+  id            Int      @id @default(autoincrement())
+  name          String   @db.VarChar(127)
+  description   String?  @db.VarChar(300)
+  barcode       String   @unique @db.VarChar(300)
+  color         String?  @db.VarChar(127)
+  size          String?  @db.VarChar(50)
+  purchaseValue String   @db.VarChar(100)
+  saleValue     String   @db.VarChar(100)
+  createdBy     Int
+  createdAt     DateTime @default(now()) @db.Timestamp(0)
+  updatedBy     Int
+  updatedAt     DateTime @default(now()) @db.Timestamp(0)
+
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId Int?
+
+  Exit   Whitdraw? @relation(fields: [exitId], references: [id])
+  exitId Int?
+
+  Entrance   Entrance? @relation(fields: [entranceId], references: [id])
+  entranceId Int?
+}
+
+model Category {
+  id        Int       @id @unique @default(autoincrement())
+  category  String    @unique @db.VarChar(100)
+  createdAt DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt DateTime  @default(now()) @db.Timestamp(0)
+  products  Product[]
+}
+
+model Whitdraw {
+  id            Int      @id @unique() @default(autoincrement())
+  orderPurchase String   @unique @db.VarChar(100)
+  nameProduct   String   @db.VarChar(100)
+  amount        Int      @default(0)
+  createdBy     Int
+  createdAt     DateTime @default(now()) @db.Timestamp(0)
+
+  products Product[]
+}
+
+model Entrance {
+  id          Int      @id @unique() @default(autoincrement())
+  order       String   @unique @db.VarChar(100)
+  nameproduct String   @db.VarChar(100)
+  amount      Int      @default(0)
+  createdBy   Int
+  createdAt   DateTime @default(now()) @db.Timestamp(0)
+
+  products Product[]
+}
