@@ -6,10 +6,6 @@ import {
 import { PrismaService } from 'nestjs-prisma';
 import { type CreateProductDto } from './dto/create-product-dto';
 import { GetProductsDto } from './dto/get-product-dto';
-import {
-  UpdateProductResponseDto,
-  type UpdateProductDto,
-} from './dto/update-product-dto';
 
 @Injectable()
 export class ProductService {
@@ -92,9 +88,7 @@ export class ProductService {
     return result;
   }
 
-  async updateProduct(
-    data: UpdateProductDto,
-  ): Promise<UpdateProductResponseDto> {
+  async updateProduct(data: any): Promise<any> {
     const x = await this.prismaService.product.update({
       where: {
         barcode: data.barcode,

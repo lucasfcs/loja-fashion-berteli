@@ -10,10 +10,6 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { CreateProductDto } from './dto/create-product-dto';
 import { GetProductsDto } from './dto/get-product-dto';
-import {
-  UpdateProductDto,
-  UpdateProductResponseDto,
-} from './dto/update-product-dto';
 import { ProductService } from './product.service';
 
 @ApiTags('Product')
@@ -36,9 +32,7 @@ export class ProductController {
   }
 
   @Patch('update-product')
-  async updateProduct(
-    @Body() data: UpdateProductDto,
-  ): Promise<UpdateProductResponseDto> {
+  async updateProduct(@Body() data: any): Promise<any> {
     const x = await this.productService.updateProduct(data);
     return x;
   }

@@ -25,6 +25,7 @@ model Product {
   size          String?  @db.VarChar(50)
   purchaseValue String   @db.VarChar(100)
   saleValue     String   @db.VarChar(100)
+  status        Boolean  @default(false)
   createdBy     Int
   createdAt     DateTime @default(now()) @db.Timestamp(0)
   updatedBy     Int
@@ -60,12 +61,11 @@ model Whitdraw {
 }
 
 model Entrance {
-  id          Int      @id @unique() @default(autoincrement())
-  order       String   @unique @db.VarChar(100)
-  nameproduct String   @db.VarChar(100)
-  amount      Int      @default(0)
-  createdBy   Int
-  createdAt   DateTime @default(now()) @db.Timestamp(0)
+  id        Int      @id @unique() @default(autoincrement())
+  order     String   @unique @db.VarChar(100)
+  amount    Int      @default(0)
+  createdBy Int
+  createdAt DateTime @default(now()) @db.Timestamp(0)
 
   products Product[]
 }
