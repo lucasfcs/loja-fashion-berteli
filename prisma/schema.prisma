@@ -39,6 +39,8 @@ model Product {
 
   Entrance   Entrance? @relation(fields: [entranceId], references: [id])
   entranceId Int?
+  Payment    Payment?  @relation(fields: [paymentId], references: [id])
+  paymentId  Int?
 }
 
 model Category {
@@ -58,15 +60,26 @@ model Whitdraw {
   createdAt     DateTime @default(now()) @db.Timestamp(0)
 
   products Product[]
+  payments Payment[]
 }
 
 model Entrance {
   id        Int      @id @unique() @default(autoincrement())
   order     String   @unique @db.VarChar(100)
-  teste     String   @db.VarChar(100)
   amount    Int      @default(0)
   createdBy Int
   createdAt DateTime @default(now()) @db.Timestamp(0)
+
+  products Product[]
+}
+
+model Payment {
+  id          Int      @id @unique() @default(autoincrement())
+  typePayment String   @unique @db.VarChar(100)
+  createdAt   DateTime @default(now()) @db.Timestamp(0)
+
+  Whitdraw   Whitdraw? @relation(fields: [whitdrawId], references: [id])
+  whitdrawId Int?
 
   products Product[]
 }
