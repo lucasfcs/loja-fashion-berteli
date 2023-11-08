@@ -29,9 +29,13 @@ export class PaymentsService {
         },
       },
       select: {
-        products: {
+        whitdraws: {
           select: {
-            saleValue: true,
+            Product: {
+              select: {
+                saleValue: true,
+              },
+            },
           },
         },
       },

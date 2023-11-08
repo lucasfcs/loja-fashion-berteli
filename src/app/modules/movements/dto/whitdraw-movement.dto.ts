@@ -16,7 +16,7 @@ export class WhitdrawMovementDto {
 
   @ApiProperty()
   @IsNumber()
-  amount!: number;
+  amountWhitdraw!: number;
 
   @ApiProperty()
   @IsNumber()
@@ -28,4 +28,8 @@ export class WhitdrawMovementDto {
   @ApiProperty()
   @IsString()
   typePayment!: string;
+
+  @ApiProperty()
+  @IsNumber()
+  productId!: number;
 }

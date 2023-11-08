@@ -39,8 +39,11 @@ model Product {
 
   Entrance   Entrance? @relation(fields: [entranceId], references: [id])
   entranceId Int?
-  Payment    Payment?  @relation(fields: [paymentId], references: [id])
-  paymentId  Int?
+
+  Payment   Payment? @relation(fields: [paymentId], references: [id])
+  paymentId Int?
+  Stock     Stock?   @relation(fields: [stockId], references: [id])
+  stockId   Int?
 }
 
 model Category {
@@ -52,23 +55,27 @@ model Category {
 }
 
 model Whitdraw {
-  id            Int      @id @unique() @default(autoincrement())
-  orderPurchase String   @unique @db.VarChar(100)
-  nameProduct   String   @db.VarChar(100)
-  amount        Int      @default(0)
-  createdBy     Int
-  createdAt     DateTime @default(now()) @db.Timestamp(0)
+  id             Int      @id @unique() @default(autoincrement())
+  orderPurchase  String   @unique @db.VarChar(100)
+  nameProduct    String   @db.VarChar(100)
+  amountWhitdraw Int
+  createdBy      Int
+  createdAt      DateTime @default(now()) @db.Timestamp(0)
 
-  products Product[]
-  payments Payment[]
+  Stock     Stock?    @relation(fields: [stockId], references: [id])
+  stockId   Int?
+  Product   Product[]
+  Payment   Payment?  @relation(fields: [paymentId], references: [id])
+  paymentId Int?
 }
 
 model Entrance {
-  id        Int      @id @unique() @default(autoincrement())
-  order     String   @unique @db.VarChar(100)
-  amount    Int      @default(0)
-  createdBy Int
-  createdAt DateTime @default(now()) @db.Timestamp(0)
+  id          Int      @id @unique() @default(autoincrement())
+  nameProduct String
+  order       String   @unique @db.VarChar(100)
+  amount      Int      @default(0)
+  createdBy   Int
+  createdAt   DateTime @default(now()) @db.Timestamp(0)
 
   products Product[]
 }
@@ -78,8 +85,19 @@ model Payment {
   typePayment String   @unique @db.VarChar(100)
   createdAt   DateTime @default(now()) @db.Timestamp(0)
 
-  Whitdraw   Whitdraw? @relation(fields: [whitdrawId], references: [id])
-  whitdrawId Int?
+  whitdraws Whitdraw[]
 
   products Product[]
+}
+
+model Stock {
+  id          Int      @id @unique() @default(autoincrement())
+  ProductName String
+  ammount     Int
+  createdAt   DateTime @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime @default(now()) @db.Timestamp(0)
+
+  products Product[]
+
+  whitdraws Whitdraw[]
 }

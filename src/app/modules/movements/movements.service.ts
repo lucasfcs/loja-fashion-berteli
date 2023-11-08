@@ -5,55 +5,106 @@ import { WhitdrawMovementDto } from './dto/whitdraw-movement.dto';
 @Injectable()
 export class MovementsService {
   constructor(private readonly prismaService: PrismaService) {}
-  // async CreateEntrance(data: any): Promise<any> {
-  //   const x = await this.prismaService.whitdraw.create({
+  // async createEntrance(data: EntranceMovementDto | any): Promise<any> {
+  //   await this.prismaService.entrance.create({
   //     data: {
-  //       createdBy: 1,
   //       nameProduct: data.nameProduct,
-  //       orderPurchase: data.orderPurchase,
-  //       amount: data.amount,
+  //       order: '1234',
+  //       products: {
+  //         connect: {
+  //           name: data.nameProduct,
+  //         },
+  //         createdBy: 1,
+  //       },
   //     },
   //   });
-  //   console.log(x);
   // }
 
   async whitdrawMovement(
     data: WhitdrawMovementDto,
   ): Promise<{ message: string }> {
-    const x = await this.prismaService.whitdraw.create({
+    await this.prismaService.whitdraw.create({
       data: {
         nameProduct: data.nameProduct,
-        orderPurchase: '123',
-        amount: data.amount,
-        products: {
-          connect: {
-            id: data.id,
-          },
-        },
-        payments: {
+        orderPurchase: data.orderPurchase,
+        amountWhitdraw: data.amountWhitdraw,
+        Payment: {
           connect: {
             typePayment: data.typePayment,
           },
         },
+        Stock: {
+          connect: {
+            id: data.id,
+          },
+        },
+
         createdBy: 1,
       },
     });
+
+    const x = await this.prismaService.stock.findFirst({
+      where: {
+        id: data.id,
+      },
+      select: {
+        ammount: true,
+      },
+    });
+
+    if (x) {
+      const newAmmount = x.ammount - data.amountWhitdraw;
+      await this.prismaService.stock.update({
+        where: {
+          id: data.id,
+        },
+        data: {
+          ammount: newAmmount,
+        },
+      });
+    }
+    console.log(x);
     return { message: 'deu certo' };
   }
 
-  // async getAllMovementWhitdraw(data: GetMovementWhitdrawDto): Promise<any> {
-  //   const x = await this.prismaService.whitdraw.findMany({
-  //     where: {
-  //       payments: data.payment,
-  //     },
+  // async getAllMovement(): Promise<any> {
+  //   const data = await this.prismaService.whitdraw.findMany({
   //     select: {
-  //       products: {
+  //       id: true,
+  //       nameProduct: true,
+  //       amount: true,
+  //       Payment: {
+  //         select: { typePayment: true },
+  //       },
+  //       Product: {
   //         select: {
   //           saleValue: true,
   //         },
   //       },
   //     },
   //   });
-  //   return x;
+
+  // Filtre os resultados para incluir apenas transações de "Débito"
+  // const debitTransactions = data.filter((item) =>
+  //   item.Payment.some(
+  //     (payment) => (
+  //       payment.typePayment === 'Debito',
+  //       'Credito',
+  //       'Pendente',
+  //       'Credito em 2x',
+  //       'Credito em 3x'
+  //     ),
+  //   ),
+  // );
+
+  // Calcule o valor total das transações de "Débito"
+  // const totalDebitAmount = debitTransactions.reduce((total, item) => {
+  //   return (
+  //     total +
+  //     Number(item.Product[0].saleValue.replace('R$', '').replace(',', '.'))
+  //   );
+  // }, 0);
+
+  // return totalDebitAmount;
   // }
 }

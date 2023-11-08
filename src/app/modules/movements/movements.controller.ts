@@ -7,13 +7,20 @@ import { MovementsService } from './movements.service';
 @Controller('movements')
 export class MovementsController {
   constructor(private readonly movementsService: MovementsService) {}
-  @Post()
+
+  // @Post('entrance')
+  // async createEntrance(@Body() data: EntranceMovementDto): Promise<any> {
+  //   await this.movementsService.createEntrance(data);
+  // }
+
+  @Post('whitdraw')
   async whitdrawMovement(@Body() data: WhitdrawMovementDto): Promise<any> {
     await this.movementsService.whitdrawMovement(data);
   }
 
   // @Get()
-  // async getAllMovementWhitdraw(@Body() data: any): Promise<any> {
-  //   await this.movementsService.getAllMovementWhitdraw(data);
+  // async getAllMovementWhitdraw(): Promise<any> {
+  //   const x = await this.movementsService.getAllMovement();
+  //   return x;
   // }
 }
